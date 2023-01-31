@@ -1,0 +1,16 @@
+- id: eclipse/che-machine-exec-plugin/latest
+  override:
+    sidecar:
+      name: exec-plugin
+- id: ms-vscode/node-debug2/latest
+  override:
+    sidecar:
+      name: node-debug2
+- id: redhat/vscode-yaml/latest
+  override:
+    sidecar:
+      name: vscode-yaml
+- id: vscode/typescript-language-features/latest
+  override:
+    sidecar:
+      name: typescript-language-features
