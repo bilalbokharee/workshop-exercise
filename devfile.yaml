@@ -33,21 +33,6 @@ projects:
 components:
   - name: stack-tl500
     container:
-      args:
-        - /bin/sh
-        - '-c'
-        - sleep infinity
-      image: 'quay.io/rht-labs/stack-tl500:3.0.16'
-      memoryLimit: 2Gi
-      mountSources: true
-      sourceMapping: /projects
-      volumeMounts:
-        - name: projects
-          path: /projects
-        - name: config
-          path: /home/developer/.config
-        - name: npm
-          path: /home/developer/.npm
       endpoints:
       - name: ide-8080
         port: 8080
@@ -101,4 +86,20 @@ components:
           discoverable: "true"
           public: "true"
           protocol: http
+      args:
+        - /bin/sh
+        - '-c'
+        - sleep infinity
+      image: 'quay.io/rht-labs/stack-tl500:3.0.16'
+      memoryLimit: 2Gi
+      mountSources: true
+      sourceMapping: /projects
+      volumeMounts:
+        - name: projects
+          path: /projects
+        - name: config
+          path: /home/developer/.config
+        - name: npm
+          path: /home/developer/.npm
+      
     
