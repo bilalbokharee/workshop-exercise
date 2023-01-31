@@ -1,7 +1,6 @@
 schemaVersion: 2.1.0
 metadata:
   name: workshop
-  generateName: workshop-
 attributes:
   .che/che-editor.yaml: |
     id: eclipse/che-theia/latest
@@ -25,55 +24,41 @@ attributes:
   .vscode/extensions.json: |-
     {
       "recommendations": [
-        "eclipse/che-machine-exec-plugin",
-        "ms-vscode/node-debug2",
-        "redhat/vscode-yaml",
-        "vscode/typescript-language-features"
+        "eclipse.che-machine-exec-plugin",
+        "ms-vscode.node-debug2",
+        "redhat.vscode-yaml",
+        "vscode.typescript-language-features"
       ]
     }
-  dw.metadata.annotations:
-    che.eclipse.org/che-editor: che-incubator/che-code/insiders
-    che.eclipse.org/devfile-source: |
-      url:
-        location: >-
-          https://raw.githubusercontent.com/stakater/workshop-exercise/main/devfile.yaml
-      factory:
-        params: >-
-          url=https://raw.githubusercontent.com/stakater/workshop-exercise/main/devfile.yaml
-    che.eclipse.org/last-updated-timestamp: '2023-01-31T10:38:33.801Z'
+  controller.devfile.io/devworkspace-config:
+    name: devworkspace-config
+    namespace: openshift-operators
+  controller.devfile.io/storage-type: per-user
   metadata-name-field: generateName
   metadata-name-original-value: workshop-
 projects:
-  - attributes:
-      source-origin: branch
-    clonePath: stakater-nordmart-review
+  - clonePath: stakater-nordmart-review
     git:
       checkoutFrom:
         revision: main
       remotes:
         origin: 'https://github.com/stakater-lab/stakater-nordmart-review'
     name: stakater-nordmart-review
-  - attributes:
-      source-origin: branch
-    clonePath: stakater-nordmart-review-ui
+  - clonePath: stakater-nordmart-review-ui
     git:
       checkoutFrom:
         revision: main
       remotes:
         origin: 'https://github.com/stakater-lab/stakater-nordmart-review-ui'
     name: stakater-nordmart-review-ui
-  - attributes:
-      source-origin: branch
-    clonePath: stakater-nordmart-review-e2e
+  - clonePath: stakater-nordmart-review-e2e
     git:
       checkoutFrom:
         revision: main
       remotes:
         origin: 'https://github.com/stakater-lab/stakater-nordmart-review-e2e'
     name: stakater-nordmart-review-e2e
-  - attributes:
-      source-origin: branch
-    clonePath: nordmart-apps-gitops-config
+  - clonePath: nordmart-apps-gitops-config
     git:
       checkoutFrom:
         revision: main
@@ -81,11 +66,28 @@ projects:
         origin: 'https://github.com/stakater-lab/nordmart-apps-gitops-config'
     name: nordmart-apps-gitops-config
 components:
-  - container:
+  - attributes:
+      che-code.eclipse.org/contribute-cpuLimit: true
+      che-code.eclipse.org/contribute-cpuRequest: true
+      che-code.eclipse.org/contribute-endpoint/che-code: 3100
+      che-code.eclipse.org/contribute-endpoint/code-redirect-1: 13131
+      che-code.eclipse.org/contribute-endpoint/code-redirect-2: 13132
+      che-code.eclipse.org/contribute-endpoint/code-redirect-3: 13133
+      che-code.eclipse.org/contribute-entry-point: true
+      che-code.eclipse.org/contribute-memoryLimit: true
+      che-code.eclipse.org/contribute-memoryRequest: true
+      che-code.eclipse.org/contribute-volume-mount/checode: /checode
+      che-code.eclipse.org/contributed-container: stack-tl500
+      che-code.eclipse.org/original-memoryLimit: 2Gi
+    container:
       args:
         - /bin/sh
         - '-c'
         - sleep infinity
+      command:
+        - /checode/entrypoint-volume.sh
+      cpuLimit: 500m
+      cpuRequest: 30m
       endpoints:
         - attributes:
             discoverable: 'true'
@@ -157,8 +159,54 @@ components:
           name: ide-8084
           protocol: http
           targetPort: 8084
+        - attributes:
+            contributed-by: che-code.eclipse.org
+            cookiesAuthEnabled: true
+            discoverable: false
+            type: main
+            urlRewriteSupported: true
+          exposure: public
+          name: che-code
+          path: '?tkn=eclipse-che'
+          protocol: https
+          secure: false
+          targetPort: 3100
+        - attributes:
+            contributed-by: che-code.eclipse.org
+            discoverable: false
+            urlRewriteSupported: true
+          exposure: public
+          name: code-redirect-1
+          protocol: http
+          targetPort: 13131
+        - attributes:
+            contributed-by: che-code.eclipse.org
+            discoverable: false
+            urlRewriteSupported: true
+          exposure: public
+          name: code-redirect-2
+          protocol: http
+          targetPort: 13132
+        - attributes:
+            contributed-by: che-code.eclipse.org
+            discoverable: false
+            urlRewriteSupported: true
+          exposure: public
+          name: code-redirect-3
+          protocol: http
+          targetPort: 13133
+      env:
+        - name: CHE_DASHBOARD_URL
+          value: 'https://devspaces.apps.devtest.vxdqgl7u.kubeapp.cloud'
+        - name: CHE_PLUGIN_REGISTRY_URL
+          value: 'https://devspaces.apps.devtest.vxdqgl7u.kubeapp.cloud/plugin-registry/v3'
+        - name: CHE_PLUGIN_REGISTRY_INTERNAL_URL
+          value: 'http://plugin-registry.openshift-operators.svc:8080/v3'
+        - name: OPENVSX_REGISTRY_URL
+          value: 'https://open-vsx.org'
       image: 'quay.io/rht-labs/stack-tl500:3.0.16'
-      memoryLimit: 2Gi
+      memoryLimit: 3Gi
+      memoryRequest: 256Mi
       mountSources: true
       sourceMapping: /projects
       volumeMounts:
@@ -168,10 +216,14 @@ components:
           path: /home/developer/.config
         - name: npm
           path: /home/developer/.npm
+        - name: checode
+          path: /checode
     name: stack-tl500
   - name: projects
     volume: {}
   - name: config
     volume: {}
   - name: npm
+    volume: {}
+  - name: checode
     volume: {}
