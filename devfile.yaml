@@ -1,6 +1,7 @@
 schemaVersion: 2.1.0
 metadata:
-  name: workshop
+  name: workshop-okmn
+  namespace: workshop-bilal-bokharee-stakater-sandbox
 attributes:
   .che/che-editor.yaml: |
     id: eclipse/che-theia/latest
@@ -24,41 +25,59 @@ attributes:
   .vscode/extensions.json: |-
     {
       "recommendations": [
-        "eclipse.che-machine-exec-plugin",
-        "ms-vscode.node-debug2",
-        "redhat.vscode-yaml",
-        "vscode.typescript-language-features"
+        "eclipse/che-machine-exec-plugin",
+        "ms-vscode/node-debug2",
+        "redhat/vscode-yaml",
+        "vscode/typescript-language-features"
       ]
     }
   controller.devfile.io/devworkspace-config:
     name: devworkspace-config
-    namespace: openshift-operators
+    namespace: devworkspace-operator
   controller.devfile.io/storage-type: per-user
+  dw.metadata.annotations:
+    che.eclipse.org/che-editor: che-incubator/che-code/insiders
+    che.eclipse.org/devfile-source: |
+      url:
+        location: >-
+          https://raw.githubusercontent.com/stakater/workshop-exercise/main/devfile.yaml
+      factory:
+        params: >-
+          url=https://raw.githubusercontent.com/stakater/workshop-exercise/main/devfile.yaml
+    che.eclipse.org/last-updated-timestamp: '2023-01-31T10:38:33.801Z'
   metadata-name-field: generateName
   metadata-name-original-value: workshop-
 projects:
-  - clonePath: stakater-nordmart-review
+  - attributes:
+      source-origin: branch
+    clonePath: stakater-nordmart-review
     git:
       checkoutFrom:
         revision: main
       remotes:
         origin: 'https://github.com/stakater-lab/stakater-nordmart-review'
     name: stakater-nordmart-review
-  - clonePath: stakater-nordmart-review-ui
+  - attributes:
+      source-origin: branch
+    clonePath: stakater-nordmart-review-ui
     git:
       checkoutFrom:
         revision: main
       remotes:
         origin: 'https://github.com/stakater-lab/stakater-nordmart-review-ui'
     name: stakater-nordmart-review-ui
-  - clonePath: stakater-nordmart-review-e2e
+  - attributes:
+      source-origin: branch
+    clonePath: stakater-nordmart-review-e2e
     git:
       checkoutFrom:
         revision: main
       remotes:
         origin: 'https://github.com/stakater-lab/stakater-nordmart-review-e2e'
     name: stakater-nordmart-review-e2e
-  - clonePath: nordmart-apps-gitops-config
+  - attributes:
+      source-origin: branch
+    clonePath: nordmart-apps-gitops-config
     git:
       checkoutFrom:
         revision: main
@@ -197,13 +216,13 @@ components:
           targetPort: 13133
       env:
         - name: CHE_DASHBOARD_URL
-          value: 'https://devspaces.apps.devtest.vxdqgl7u.kubeapp.cloud'
+          value: 'https://devspaces.apps.preprod.jlvwjls8.kubeapp.cloud'
         - name: CHE_PLUGIN_REGISTRY_URL
-          value: 'https://devspaces.apps.devtest.vxdqgl7u.kubeapp.cloud/plugin-registry/v3'
+          value: 'https://devspaces.apps.preprod.jlvwjls8.kubeapp.cloud/plugin-registry/v3'
         - name: CHE_PLUGIN_REGISTRY_INTERNAL_URL
-          value: 'http://plugin-registry.openshift-operators.svc:8080/v3'
+          value: 'http://plugin-registry.devworkspace-operator.svc:8080/v3'
         - name: OPENVSX_REGISTRY_URL
-          value: 'https://open-vsx.org'
+          value: ''
       image: 'quay.io/rht-labs/stack-tl500:3.0.16'
       memoryLimit: 3Gi
       memoryRequest: 256Mi
@@ -224,6 +243,4 @@ components:
   - name: config
     volume: {}
   - name: npm
-    volume: {}
-  - name: checode
     volume: {}
