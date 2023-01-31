@@ -31,123 +31,40 @@ projects:
         origin: 'https://github.com/stakater-lab/nordmart-apps-gitops-config'
     name: nordmart-apps-gitops-config
 components:
-  - name: stack-tl500
+  - attributes:
+      che-code.eclipse.org/contribute-cpuLimit: true
+      che-code.eclipse.org/contribute-cpuRequest: true
+      che-code.eclipse.org/contribute-endpoint/che-code: 3100
+      che-code.eclipse.org/contribute-endpoint/code-redirect-1: 13131
+      che-code.eclipse.org/contribute-endpoint/code-redirect-2: 13132
+      che-code.eclipse.org/contribute-endpoint/code-redirect-3: 13133
+      che-code.eclipse.org/contribute-entry-point: true
+      che-code.eclipse.org/contribute-memoryLimit: true
+      che-code.eclipse.org/contribute-memoryRequest: true
+      che-code.eclipse.org/contribute-volume-mount/checode: /checode
+      che-code.eclipse.org/contributed-container: stack-tl500
+      che-code.eclipse.org/original-memoryLimit: 2Gi
     container:
-      command:
-        - /checode/entrypoint-volume.sh
       args:
         - /bin/sh
         - '-c'
         - sleep infinity
-      endpoints:
-        - attributes:
-            discoverable: 'true'
-            protocol: http
-            public: 'true'
-          exposure: public
-          name: ide-8080
-          protocol: http
-          targetPort: 8080
-        - attributes:
-            discoverable: 'true'
-            protocol: http
-            public: 'true'
-          exposure: public
-          name: ide-9000
-          protocol: http
-          targetPort: 9000
-        - attributes:
-            discoverable: 'true'
-            protocol: http
-            public: 'true'
-          exposure: public
-          name: ide-3000
-          protocol: http
-          targetPort: 3000
-        - attributes:
-            discoverable: 'true'
-            protocol: http
-            public: 'true'
-          exposure: public
-          name: ide-4200
-          protocol: http
-          targetPort: 4200
-        - attributes:
-            protocol: http
-          exposure: public
-          name: ide-4444
-          protocol: http
-          targetPort: 4444
-        - attributes:
-            discoverable: 'true'
-            protocol: http
-            public: 'true'
-          exposure: public
-          name: ide-8081
-          protocol: http
-          targetPort: 8081
-        - attributes:
-            discoverable: 'true'
-            protocol: http
-            public: 'true'
-          exposure: public
-          name: ide-8082
-          protocol: http
-          targetPort: 8082
-        - attributes:
-            discoverable: 'true'
-            protocol: http
-            public: 'true'
-          exposure: public
-          name: ide-8083
-          protocol: http
-          targetPort: 8083
-        - attributes:
-            discoverable: 'true'
-            protocol: http
-            public: 'true'
-          exposure: public
-          name: ide-8084
-          protocol: http
-          targetPort: 8084
-        - attributes:
-            contributed-by: che-code.eclipse.org
-            cookiesAuthEnabled: true
-            discoverable: false
-            type: main
-            urlRewriteSupported: true
-          exposure: public
-          name: che-code
-          path: '?tkn=eclipse-che'
-          protocol: https
-          secure: false
-          targetPort: 3100
-        - attributes:
-            contributed-by: che-code.eclipse.org
-            discoverable: false
-            urlRewriteSupported: true
-          exposure: public
-          name: code-redirect-1
-          protocol: http
-          targetPort: 13131
-        - attributes:
-            contributed-by: che-code.eclipse.org
-            discoverable: false
-            urlRewriteSupported: true
-          exposure: public
-          name: code-redirect-2
-          protocol: http
-          targetPort: 13132
-        - attributes:
-            contributed-by: che-code.eclipse.org
-            discoverable: false
-            urlRewriteSupported: true
-          exposure: public
-          name: code-redirect-3
-          protocol: http
-          targetPort: 13133
+      command:
+        - /checode/entrypoint-volume.sh
+      cpuLimit: 500m
+      cpuRequest: 30m
+      env:
+        - name: CHE_DASHBOARD_URL
+          value: 'https://devspaces.apps.devtest.vxdqgl7u.kubeapp.cloud'
+        - name: CHE_PLUGIN_REGISTRY_URL
+          value: 'https://devspaces.apps.devtest.vxdqgl7u.kubeapp.cloud/plugin-registry/v3'
+        - name: CHE_PLUGIN_REGISTRY_INTERNAL_URL
+          value: 'http://plugin-registry.openshift-operators.svc:8080/v3'
+        - name: OPENVSX_REGISTRY_URL
+          value: 'https://open-vsx.org'
       image: 'quay.io/rht-labs/stack-tl500:3.0.16'
-      memoryLimit: 2Gi
+      memoryLimit: 3Gi
+      memoryRequest: 256Mi
       mountSources: true
       sourceMapping: /projects
       volumeMounts:
@@ -157,3 +74,14 @@ components:
           path: /home/developer/.config
         - name: npm
           path: /home/developer/.npm
+        - name: checode
+          path: /checode
+    name: stack-tl500
+  - name: projects
+    volume: {}
+  - name: config
+    volume: {}
+  - name: npm
+    volume: {}
+  - name: checode
+    volume: {}
