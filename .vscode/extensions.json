@@ -1,0 +1,8 @@
+{
+      "recommendations": [
+        "eclipse.che-machine-exec-plugin",
+        "ms-vscode.node-debug2",
+        "redhat.vscode-yaml",
+        "vscode.typescript-language-features"
+      ]
+    }
