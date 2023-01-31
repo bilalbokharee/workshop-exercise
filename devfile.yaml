@@ -27,15 +27,6 @@ attributes:
 projects:
   - attributes:
       source-origin: branch
-    clonePath: stakater-nordmart-review
-    git:
-      checkoutFrom:
-        revision: main
-      remotes:
-        origin: 'https://github.com/stakater-lab/stakater-nordmart-review'
-    name: stakater-nordmart-review
-  - attributes:
-      source-origin: branch
     clonePath: stakater-nordmart-review-ui
     git:
       checkoutFrom:
