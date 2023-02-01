@@ -10,3 +10,10 @@ projects:
         origin: 'https://github.com/stakater-lab/stakater-nordmart-review.git'
       checkoutFrom:
         revision: main
+  - name: stakater-nordmart-review-ui
+    clonePath: stakater-nordmart-review-ui
+    git:
+      remotes:
+        origin: 'https://github.com/stakater-lab/stakater-nordmart-review-ui.git'
+      checkoutFrom:
+        revision: main
